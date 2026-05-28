@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Community Event Portal</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+            margin:20px;
+        }
+        h1{
+            color:darkblue;
+        }
+        .event-card{
+            background:white;
+            padding:15px;
+            margin:10px 0;
+            border-radius:10px;
+            box-shadow:0 0 5px gray;
+        }
+        button{
+            padding:8px 12px;
+            background:blue;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+        button:hover{
+            background:darkblue;
+        }
+
+        #loading{
+            color:red;
+            display:none;
+        }
+
+        .error{
+            color:red;
+            font-size:14px;
+        }
+    </style>
+</head>
+<body>
+<h1>Local Community Event Portal</h1>
+<label>Filter by Category:</label>
+<select id="categoryFilter">
+    <option value="all">All</option>
+    <option value="Music">Music</option>
+    <option value="Workshop">Workshop</option>
+    <option value="Sports">Sports</option>
+</select>
+<br><br>
+<input type="text" id="searchBox" placeholder="Search event name">
+<div id="loading">Loading events...</div>
+<div id="eventContainer"></div>
+<hr>
+<h2>Register for Event</h2>
+<form id="registrationForm">
+    <input type="text" name="username" placeholder="Enter Name">
+    <span class="error" id="nameError"></span>
+    <br><br>
+    <input type="email" name="email" placeholder="Enter Email">
+    <span class="error" id="emailError"></span>
+    <br><br>
+    <select name="selectedEvent">
+        <option value="">Select Event</option>
+        <option value="Music Fest">Music Fest</option>
+        <option value="Baking Workshop">Baking Workshop</option>
+        <option value="Football Match">Football Match</option>
+    </select>
+    <span class="error" id="eventError"></span>
+    <br><br>
+    <button type="submit" id="registerBtn">Submit</button>
+</form>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
+# 2. JavaScript File (main.js)
+console.log("Welcome to the Community Portal");
+window.onload = function () {
+    alert("Page Fully Loaded");
+};
+const portalName = "Community Event Portal";
+const todayDate = "28-05-2026";
+let seats = 50;
+let info = `Welcome to ${portalName} - Date: ${todayDate}`;
+console.log(info);
+seats++;
+seats--;
+class Event {
+    constructor(name, category, seats, date) {
+        this.name = name;
+        this.category = category;
+        this.seats = seats;
+        this.date = date;
+    }
+}
+Event.prototype.checkAvailability = function () {
+    if (this.seats > 0) {
+        return "Seats Available";
+    }
+    else {
+        return "House Full";
+    }
+};
+let events = [
+    new Event("Music Fest", "Music", 10, "2026-06-10"),
+    new Event("Baking Workshop", "Workshop", 5, "2026-07-01"),
+    new Event("Football Match", "Sports", 0, "2025-01-01")
+];
+events.push(
+    new Event("Dance Show", "Music", 20, "2026-08-15")
+);
+let musicEvents = events.filter(event => event.category === "Music");
+console.log("Music Events:", musicEvents);
+let formattedCards = events.map(
+    event => `Workshop on ${event.name}`
+);
+console.log(formattedCards);
+events.forEach(event => {
+    console.log(Object.entries(event));
+});
+function addEvent(name, category, seats, date) {
+    let newEvent = new Event(name, category, seats, date);
+    events.push(newEvent);
+}
+function registerUser(eventName) {
+    try {
+        let foundEvent = events.find(
+            event => event.name === eventName
+        );
+        if (!foundEvent) {
+            throw "Event not found";
+        }
+        if (foundEvent.seats <= 0) {
+            throw "No seats available";
+        }
+        foundEvent.seats--;
+        alert(`Registered for ${eventName}`);
+        displayEvents(events);
+    }
+    catch(error) {
+        console.error(error);
+    }
+}
+function filterEventsByCategory(category, callback) {
+    let filtered = events.filter(
+        event => event.category === category
+    );
+    callback(filtered);
+}
+function registrationTracker() {
+    let totalRegistrations = 0;
+    return function () {
+        totalRegistrations++;
+        console.log(
+            "Total Registrations:",
+            totalRegistrations
+        );
+    };
+}
+const trackMusicRegistration = registrationTracker();
+const eventContainer =
+    document.querySelector("#eventContainer");
+function displayEvents(eventList) {
+    eventContainer.innerHTML = "";
+    eventList.forEach(event => {
+        let currentDate = new Date();
+        let eventDate = new Date(event.date);
+        if (eventDate < currentDate || event.seats <= 0) {
+            return;
+        }
+        let card = document.createElement("div");
+        card.classList.add("event-card");
+        card.innerHTML = `
+            <h3>${event.name}</h3>
+            <p>Category: ${event.category}</p>
+            <p>Seats: ${event.seats}</p>
+            <p>Status: ${event.checkAvailability()}</p>
+            <button onclick="registerUser('${event.name}')">
+                Register
+            </button>
+        `;
+        eventContainer.appendChild(card);
+    });
+}
+displayEvents(events);
+document.querySelector("#categoryFilter")
+.addEventListener("change", function () {
+    let category = this.value;
+    if(category === "all") {
+        displayEvents(events);
+    }
+    else {
+        filterEventsByCategory(
+            category,
+            displayEvents
+        );
+    }
+});
+document.querySelector("#searchBox")
+.addEventListener("keydown", function () {
+    let searchText = this.value.toLowerCase();
+    let searchedEvents = events.filter(event =>
+        event.name.toLowerCase().includes(searchText)
+    );
+    displayEvents(searchedEvents);
+});
+const loading =
+    document.querySelector("#loading");
+loading.style.display = "block";
+fetch("https://jsonplaceholder.typicode.com/users")
+.then(response => response.json())
+.then(data => {
+    console.log("Fetched Data:", data);
+    loading.style.display = "none";
+})
+.catch(error => {
+    console.log(error);
+    loading.style.display = "none";
+});
+async function fetchEvents() {
+    try {
+        loading.style.display = "block";
+        let response =
+            await fetch(
+                "https://jsonplaceholder.typicode.com/posts"
+            );
+        let data = await response.json();
+        console.log(data);
+        loading.style.display = "none";
+    }
+    catch(error) {
+        console.log(error);
+        loading.style.display = "none";
+    }
+}
+fetchEvents();
+let firstEvent = events[0];
+let {name, category} = firstEvent;
+console.log(name, category);
+let clonedEvents = [...events];
+console.log(clonedEvents);
+function greetUser(username = "Guest") {
+    console.log(`Welcome ${username}`);
+}
+greetUser();
+document.querySelector("#registrationForm")
+.addEventListener("submit", function(event){
+    event.preventDefault();
+    console.log("Form Submitted");
+    let username =
+        this.elements["username"].value;
+    let email =
+        this.elements["email"].value;
+    let selectedEvent =
+        this.elements["selectedEvent"].value;
+    document.querySelector("#nameError").innerHTML = "";
+    document.querySelector("#emailError").innerHTML = "";
+    document.querySelector("#eventError").innerHTML = "";
+    let valid = true;
+    if(username === "") {
+        document.querySelector("#nameError")
+        .innerHTML = "Name Required";
+        valid = false;
+    }
+    if(email === "") {
+        document.querySelector("#emailError")
+        .innerHTML = "Email Required";
+        valid = false;
+    }
+    if(selectedEvent === "") {
+        document.querySelector("#eventError")
+        .innerHTML = "Select Event";
+        valid = false;
+    }
+    if(valid) {
+        sendRegistration({
+            username,
+            email,
+            selectedEvent
+        });
+    }
+});
+function sendRegistration(userData) {
+    console.log("Sending Data:", userData);
+    setTimeout(() => {
+        fetch(
+            "https://jsonplaceholder.typicode.com/posts",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+                body: JSON.stringify(userData)
+            }
+        )
+        .then(response => response.json())
+        .then(data => {
+            alert("Registration Successful");
+            console.log(data);
+        })
+        .catch(error => {
+            alert("Registration Failed");
+            console.log(error);
+        });
+    }, 2000);
+}
+console.log("Debugging Started");
+function debugRegistration() {
+    debugger;
+    console.log("Checking Registration");
+    let sample = {
+        name: "Sangee",
+        event: "Music Fest"
+    };
+    console.log(sample);
+}
+debugRegistration();
+$("#registerBtn").click(function(){
+    console.log("jQuery Button Clicked");
+});
+$(".event-card").fadeOut(1000).fadeIn(1000);
+console.log(
+    "Frameworks like React/Vue help create reusable UI components and faster updates."
+);
+
