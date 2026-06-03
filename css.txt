@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local Community Event Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+body{
+    font-family:'Poppins',sans-serif;
+    background-color:#e6f2ff;
+    background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb');
+    background-size:cover;
+    background-attachment:fixed;
+}
+#mainHeader{
+    background:linear-gradient(to right,#007bff,#00c6ff);
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+h2{
+    color:#003366;
+    margin:15px;
+}
+.eventCard{
+    background:rgba(255,255,255,0.9);
+    border:2px solid #007bff;
+    margin:20px;
+    padding:20px;
+    border-radius:10px;
+}
+h3,p{
+    margin-bottom:10px;
+}
+p{
+    font-size:16px;
+    line-height:1.8;
+    letter-spacing:1px;
+    text-align:justify;
+}
+.description{
+    text-transform:capitalize;
+}
+.menu{
+    list-style:none;
+    background:#003366;
+    text-align:center;
+}
+.menu li{
+    display:inline-block;
+    padding:15px;
+}
+.menu a{
+    color:white;
+    text-decoration:none;
+}
+a:link{
+    color:white;
+}
+a:visited{
+    color:lightgray;
+}
+a:hover{
+    background:orange;
+    padding:5px;
+}
+a:active{
+    color:red;
+}
+.cta-button{
+    background:#007bff;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    cursor:pointer;
+}
+table{
+    width:90%;
+    margin:20px auto;
+    border-collapse:collapse;
+}
+th,td{
+    border:1px solid black;
+    padding:10px;
+    text-align:center;
+}
+th{
+    background:#007bff;
+    color:white;
+}
+tr:nth-child(even){
+    background:#f2f2f2;
+}
+form{
+    margin:20px;
+}
+input{
+    padding:10px;
+    width:300px;
+}
+input:focus{
+    outline:3px solid orange;
+}
+.news{
+    margin:20px;
+    column-count:2;
+    column-gap:30px;
+    column-rule:1px solid gray;
+}
+.hiddenBox{
+    visibility:hidden;
+}
+
+.noneBox{
+    display:none;
+}
+@media screen and (max-width:768px){
+
+    .menu li{
+        display:block;
+    }
+    h1{
+        font-size:24px;
+    }
+    h2{
+        font-size:20px;
+    }
+    .news{
+        column-count:1;
+    }
+    img{
+        width:80%;
+    }
+}
+</style>
+</head>
+<body>
+<h1 style="color:red; text-align:center;">
+    Local Community Event Portal
+</h1>
+<header id="mainHeader">
+    <h2>Welcome to Community Events</h2>
+</header>
+<ul class="menu">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Gallery</a></li>
+    <li><a href="#">Contact</a></li>
+</ul>
+<section class="eventCard">
+    <h3>Food Festival</h3>
+    <p class="description">
+        Enjoy delicious foods from different cultures and
+        participate in fun activities.
+    </p>
+</section>
+<section class="eventCard">
+    <h3>Sports Meet</h3>
+    <p class="description">
+        Participate in sports competitions and win prizes.
+    </p>
+</section>
+<h2>Event Schedule</h2>
+<table>
+    <tr>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Venue</th>
+    </tr>
+    <tr>
+        <td>Food Festival</td>
+        <td>10 July</td>
+        <td>City Hall</td>
+    </tr>
+    <tr>
+        <td>Sports Meet</td>
+        <td>15 July</td>
+        <td>Sports Ground</td>
+    </tr>
+    <tr>
+        <td>Music Night</td>
+        <td>20 July</td>
+        <td>Community Center</td>
+    </tr>
+</table>
+<h2>Register for Event</h2>
+<form>
+    <input type="text" placeholder="Enter Name">
+    <br><br>
+    <input type="email" placeholder="Enter Email">
+    <br><br>
+    <button class="cta-button">
+        Register
+    </button>
+</form>
+<h2>Community News</h2>
+<div class="news">
+The city council has announced several new community
+development initiatives. Residents are encouraged to
+participate in upcoming awareness programs and cultural
+activities. Various workshops, training sessions, and
+social service events will be conducted throughout the
+year to improve community engagement and promote local
+talent among students and citizens.
+</div>
+<div class="hiddenBox">
+    This box uses visibility:hidden
+</div>
+<div class="noneBox">
+    This box uses display:none
+</div>
+</body>
+</html>
